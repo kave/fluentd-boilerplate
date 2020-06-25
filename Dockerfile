@@ -1,19 +1,32 @@
-FROM python:3.7.4-stretch
+FROM fluent/fluentd:v1.11-1
+LABEL name="fluentd"
 
-WORKDIR /usr/src/app
-COPY . ./
+# Use root account to use apt
+USER root
 
-# System Prerequistes
-RUN apt-get update
+COPY Gemfile* /fluentd/
 
-# System Depedencies
-RUN apt-get install -y --no-install-recommends \
-        gettext \
-        vim \
-        && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apk add --no-cache --update --virtual .build-deps \
+        sudo build-base ruby-dev ruby-bigdecimal \
+  && gem install bundler \
+  && bundle config silence_root_warning true \
+  && bundle install --gemfile=/fluentd/Gemfile --path=/fluentd/vendor/bundle \
+  && apk del .build-deps \
+  && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem
 
-# Dependency Environment
-RUN pip install pipenv
-RUN pipenv install --system --deploy
+# Copy configuration files
+COPY conf/fluent* /fluentd/etc/
+
+# Copy plugins
+COPY plugins /fluentd/plugins/
+
+COPY entrypoint.sh /bin/
+
+# Environment variables
+ENV FLUENTD_OPT=""
+#ENV FLUENTD_CONF="fluent.conf"
+ENV LOG_FORMAT="json"
+
+USER fluent
+# Overwrite ENTRYPOINT
+ENTRYPOINT ["/bin/entrypoint.sh"]

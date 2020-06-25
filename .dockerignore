@@ -1,0 +1,9 @@
+.git/
+.env
+
+.DS_Store
+
+*.swp
+*.swo
+*.log
+*.map
