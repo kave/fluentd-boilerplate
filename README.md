@@ -1,5 +1,6 @@
 # Fluentd Boilerplate
-Docker -> Fluentd -> System File
+A basic boilerplate repo to expedite Fluentd usage. It allows contains some simple configuration options 
+and testing steps to familiarize yourself with the application.
 
 ## Resources
 [Configuration](https://docs.fluentd.org/configuration/config-file)
@@ -9,9 +10,10 @@ Docker -> Fluentd -> System File
 ```
 make image
 docker run -it -p 24224:24224 custom-fluentd-1.11:latest
-```  
+```
+
 # Local Development
-- Install Ruby > 2.1
+- Install Ruby > 2.5
 - Bundler
     - `gem install bundler`
     - `bundle install`
