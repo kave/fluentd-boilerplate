@@ -21,6 +21,7 @@ docker run -it -p 24224:24224 custom-fluentd-1.11:latest
     - `fluentd -c <config_file>(conf/fluent.conf) -p <plugin_directory> -vv`
 
 # Test payloads
+Test payload conf file: `docker run -it -p 24224:24224 -e FLUENTD_CONF=fluent-payload.conf custom-fluentd-1.11:latest`
 ```
 echo '{"event":{"hostname":"macOS","level":30,"msg":"This is a test","stream":"stdout"}, "payload":"{\"hello\": \"world\"}"}' | fluent-cat docker.test
 ```
@@ -28,5 +29,5 @@ Causes ArgumentError due to missing `payment` key
 ```
 echo '{"event":{"hostname":"macOS","level":30,"msg":"This is a test","stream":"stdout"}' | fluent-cat docker.test
 ```
-Test anonymizer conf file
-`docker run -it -p 24224:24224 -e FLUENTD_CONF=fluent-anonymizer.conf custom-fluentd-1.11:latest`
+
+Test anonymizer conf file: `docker run -it -p 24224:24224 -e FLUENTD_CONF=fluent-anonymizer.conf custom-fluentd-1.11:latest`
